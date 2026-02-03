@@ -1,9 +1,16 @@
 import React from "react";
-import { LayoutGrid, CheckCircle2, XCircle, Zap, Home, Info } from "lucide-react";
+import {
+  LayoutGrid,
+  CheckCircle2,
+  XCircle,
+  Zap,
+  Home,
+  Info,
+} from "lucide-react";
 
 function SlotList({ slots }) {
   const totalSlots = slots.length;
-  const occupiedSlots = slots.filter(s => s.isOccupied).length;
+  const occupiedSlots = slots.filter((s) => s.isOccupied).length;
   const availableSlots = totalSlots - occupiedSlots;
 
   return (
@@ -25,7 +32,11 @@ function SlotList({ slots }) {
         {/* Stats */}
         <div className="stat-row">
           <StatCard label="Capacity" value={totalSlots} />
-          <StatCard label="Available" value={availableSlots} variant="success" />
+          <StatCard
+            label="Available"
+            value={availableSlots}
+            variant="success"
+          />
           <StatCard label="Occupied" value={occupiedSlots} variant="danger" />
         </div>
       </div>
@@ -50,7 +61,9 @@ function SlotList({ slots }) {
                 {slots.map((slot) => (
                   <tr
                     key={slot.slotNo}
-                    className={slot.isOccupied ? "row-occupied" : "row-available"}
+                    className={
+                      slot.isOccupied ? "row-occupied" : "row-available"
+                    }
                   >
                     <td>
                       <span className="unit-label">UNIT</span>
@@ -114,16 +127,14 @@ export default SlotList;
 function StatCard({ label, value, variant }) {
   return (
     <div className="stat-card">
-      <p className="stat-card-label">
-        {label}
-      </p>
+      <p className="stat-card-label">{label}</p>
       <p
         className={
           variant === "success"
             ? "stat-card-value stat-card-value--success"
             : variant === "danger"
-            ? "stat-card-value stat-card-value--danger"
-            : "stat-card-value"
+              ? "stat-card-value stat-card-value--danger"
+              : "stat-card-value"
         }
       >
         {value}

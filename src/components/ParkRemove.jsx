@@ -15,9 +15,9 @@ function ParkRemove({ slots, setSlots, setMessage }) {
   const [removeSlotNo, setRemoveSlotNo] = useState("");
 
   const parkVehicle = () => {
-    let available = slots.filter(s => !s.isOccupied);
-    if (needsEV) available = available.filter(s => s.isEVCharging);
-    if (needsCover) available = available.filter(s => s.isCovered);
+    let available = slots.filter((s) => !s.isOccupied);
+    if (needsEV) available = available.filter((s) => s.isEVCharging);
+    if (needsCover) available = available.filter((s) => s.isCovered);
 
     if (!available.length) {
       setMessage("No compatible slot available");
@@ -27,16 +27,18 @@ function ParkRemove({ slots, setSlots, setMessage }) {
     available.sort((a, b) => a.slotNo - b.slotNo);
     const chosen = available[0];
 
-    setSlots(slots.map(s =>
-      s.slotNo === chosen.slotNo ? { ...s, isOccupied: true } : s
-    ));
+    setSlots(
+      slots.map((s) =>
+        s.slotNo === chosen.slotNo ? { ...s, isOccupied: true } : s,
+      ),
+    );
 
     setMessage(`Vehicle parked successfully at Slot #${chosen.slotNo}`);
   };
 
   const removeVehicle = () => {
     const slotNum = Number(removeSlotNo);
-    const slot = slots.find(s => s.slotNo === slotNum);
+    const slot = slots.find((s) => s.slotNo === slotNum);
 
     if (!slot) {
       setMessage("Invalid slot identification");
@@ -48,9 +50,11 @@ function ParkRemove({ slots, setSlots, setMessage }) {
       return;
     }
 
-    setSlots(slots.map(s =>
-      s.slotNo === slotNum ? { ...s, isOccupied: false } : s
-    ));
+    setSlots(
+      slots.map((s) =>
+        s.slotNo === slotNum ? { ...s, isOccupied: false } : s,
+      ),
+    );
 
     setMessage(`Slot #${slotNum} has been released`);
     setRemoveSlotNo("");
@@ -140,7 +144,9 @@ function PremiumToggle({ checked, onChange, icon, label }) {
       />
       <div
         className={
-          checked ? "premium-toggle-label premium-toggle-label--active" : "premium-toggle-label"
+          checked
+            ? "premium-toggle-label premium-toggle-label--active"
+            : "premium-toggle-label"
         }
       >
         {icon}

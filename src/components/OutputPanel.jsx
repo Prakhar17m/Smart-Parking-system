@@ -36,15 +36,16 @@ function OutputPanel({ message, onClose }) {
       <div className="flex items-center gap-3">
         {icons[type]}
         <div className="flex flex-col">
-          <p className="message-heading">
-            System Notification
-          </p>
-          <p className="message-body">
-            {message}
-          </p>
+          <p className="message-heading">System Notification</p>
+          <p className="message-body">{message}</p>
         </div>
       </div>
-      <button type="button" onClick={onClose} className="message-close" aria-label="Dismiss">
+      <button
+        type="button"
+        onClick={onClose}
+        className="message-close"
+        aria-label="Dismiss"
+      >
         <X className="w-4 h-4" />
       </button>
     </div>

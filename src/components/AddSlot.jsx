@@ -12,14 +12,14 @@ function AddSlot({ slots, setSlots, setMessage }) {
       return;
     }
 
-    if (slots.some(s => s.slotNo === Number(slotNo))) {
+    if (slots.some((s) => s.slotNo === Number(slotNo))) {
       setMessage("Slot already exists");
       return;
     }
 
     setSlots([
       ...slots,
-      { slotNo: Number(slotNo), isCovered, isEVCharging, isOccupied: false }
+      { slotNo: Number(slotNo), isCovered, isEVCharging, isOccupied: false },
     ]);
 
     setMessage("Parking slot added successfully");
