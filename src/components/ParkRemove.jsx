@@ -57,76 +57,69 @@ function ParkRemove({ slots, setSlots, setMessage }) {
   };
 
   return (
-    <div>
-      <h2 className="section-title">
-        <ParkingCircle className="w-5 h-5 text-indigo-600" />
+    <div className="space-y-10">
+      {/* Header */}
+      <h2 className="section-title flex items-center gap-3">
+        <span className="p-2 rounded-xl bg-indigo-100 text-indigo-600">
+          <ParkingCircle className="w-5 h-5" />
+        </span>
         Vehicle Management
       </h2>
 
-      <div className="space-y-6">
-        <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
-          <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Entry Assignment */}
+        <div className="glass-card">
+          <h3 className="card-title text-emerald-700 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4" />
             Entry Assignment
           </h3>
 
-          <div className="flex gap-6 mb-6">
-            <label className="flex items-center gap-3 cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={needsEV}
-                onChange={e => setNeedsEV(e.target.checked)}
-                className="premium-checkbox"
-              />
-              <div className="flex items-center gap-1.5">
-                <Zap className={`w-4 h-4 ${needsEV ? "text-indigo-600" : "text-slate-400"}`} />
-                <span className="text-sm font-medium text-slate-600">Needs EV</span>
-              </div>
-            </label>
+          <div className="flex gap-6 my-6">
+            <PremiumToggle
+              checked={needsEV}
+              onChange={setNeedsEV}
+              icon={<Zap className="w-4 h-4" />}
+              label="EV Charging"
+            />
 
-            <label className="flex items-center gap-3 cursor-pointer group">
-              <input
-                type="checkbox"
-                checked={needsCover}
-                onChange={e => setNeedsCover(e.target.checked)}
-                className="premium-checkbox"
-              />
-              <div className="flex items-center gap-1.5">
-                <Home className={`w-4 h-4 ${needsCover ? "text-indigo-600" : "text-slate-400"}`} />
-                <span className="text-sm font-medium text-slate-600">Needs Cover</span>
-              </div>
-            </label>
+            <PremiumToggle
+              checked={needsCover}
+              onChange={setNeedsCover}
+              icon={<Home className="w-4 h-4" />}
+              label="Covered Slot"
+            />
           </div>
 
           <button
             onClick={parkVehicle}
-            className="btn-success"
+            className="btn-success w-full"
           >
             <ParkingCircle className="w-4 h-4" />
             Assign Smart Slot
           </button>
         </div>
 
-        <div className="bg-slate-50 p-6 rounded-xl border border-slate-100">
-          <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
-            <Trash2 className="w-4 h-4 text-rose-500" />
+        {/* Exit Clearance */}
+        <div className="glass-card">
+          <h3 className="card-title text-rose-600 flex items-center gap-2">
+            <Trash2 className="w-4 h-4" />
             Exit Clearance
           </h3>
 
-          <div className="relative mb-4">
+          <div className="relative my-6">
             <input
               type="number"
-              placeholder="Slot ID to release"
+              placeholder="Enter Slot ID"
               value={removeSlotNo}
               onChange={e => setRemoveSlotNo(e.target.value)}
-              className="premium-input pl-10"
+              className="premium-input pl-11"
             />
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-4 top-3.5" />
           </div>
 
           <button
             onClick={removeVehicle}
-            className="btn-danger"
+            className="btn-danger w-full"
           >
             <AlertCircle className="w-4 h-4" />
             Finalize Checkout
@@ -138,3 +131,26 @@ function ParkRemove({ slots, setSlots, setMessage }) {
 }
 
 export default ParkRemove;
+
+/* ------------------ Helper Component ------------------ */
+
+function PremiumToggle({ checked, onChange, icon, label }) {
+  return (
+    <label className="flex items-center gap-3 cursor-pointer group">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={e => onChange(e.target.checked)}
+        className="premium-checkbox"
+      />
+      <div
+        className={`flex items-center gap-2 text-sm font-semibold transition ${
+          checked ? "text-indigo-600" : "text-slate-500"
+        }`}
+      >
+        {icon}
+        {label}
+      </div>
+    </label>
+  );
+}

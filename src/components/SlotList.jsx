@@ -1,6 +1,5 @@
 import {
   LayoutGrid,
-  Table as TableIcon,
   CheckCircle2,
   XCircle,
   Zap,
@@ -15,49 +14,39 @@ function SlotList({ slots }) {
 
   return (
     <div className="space-y-8">
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
-            <LayoutGrid className="w-6 h-6 text-indigo-600" />
+          <h2 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+            <span className="p-2 rounded-xl bg-indigo-100 text-indigo-600">
+              <LayoutGrid className="w-5 h-5" />
+            </span>
             Live Inventory
           </h2>
-          <p className="text-slate-500 text-sm mt-1 font-medium">Real-time status of all registered parking units.</p>
+          <p className="text-slate-500 text-sm mt-1 font-medium">
+            Real-time status of all registered parking units.
+          </p>
         </div>
 
+        {/* Stats */}
         <div className="flex gap-3">
-          <div className="bg-white border border-slate-200 px-6 py-4 rounded-2xl shadow-sm text-center min-w-[120px]">
-            <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-1">Capacity</p>
-            <p className="text-2xl font-black text-slate-900 leading-none">{totalSlots}</p>
-          </div>
-          <div className="bg-white border border-slate-200 px-6 py-4 rounded-2xl shadow-sm text-center min-w-[120px]">
-            <p className="text-emerald-500/80 text-[10px] font-bold uppercase tracking-widest mb-1">Available</p>
-            <p className="text-2xl font-black text-emerald-600 leading-none">{availableSlots}</p>
-          </div>
-          <div className="bg-white border border-slate-200 px-6 py-4 rounded-2xl shadow-sm text-center min-w-[120px]">
-            <p className="text-rose-500/80 text-[10px] font-bold uppercase tracking-widest mb-1">Occupied</p>
-            <p className="text-2xl font-black text-rose-600 leading-none">{occupiedSlots}</p>
-          </div>
+          <StatCard label="Capacity" value={totalSlots} />
+          <StatCard label="Available" value={availableSlots} variant="success" />
+          <StatCard label="Occupied" value={occupiedSlots} variant="danger" />
         </div>
       </div>
 
+      {/* Table Card */}
       <div className="glass-card !p-0 overflow-hidden">
         {slots.length === 0 ? (
-          <div className="text-center py-20 bg-slate-50/50">
-            <div className="bg-white w-20 h-20 rounded-3xl shadow-sm border border-slate-200 flex items-center justify-center mx-auto mb-6">
-              <Info className="w-8 h-8 text-slate-300" />
-            </div>
-            <h3 className="text-lg font-bold text-slate-900">No Inventory Data</h3>
-            <p className="text-slate-500 text-sm max-w-xs mx-auto mt-2 leading-relaxed">
-              Queue your first parking slot to see real-time distribution analytics.
-            </p>
-          </div>
+          <EmptyState />
         ) : (
           <div className="overflow-x-auto">
-            <table className="premium-table">
+            <table className="w-full premium-table">
               <thead>
                 <tr>
                   <th>Identity</th>
-                  <th>Configuration</th>
+                  <th>Facility</th>
                   <th>Charging</th>
                   <th>Status</th>
                 </tr>
@@ -65,46 +54,54 @@ function SlotList({ slots }) {
 
               <tbody>
                 {slots.map(slot => (
-                  <tr key={slot.slotNo}>
+                  <tr
+                    key={slot.slotNo}
+                    className="hover:bg-indigo-50/40 transition"
+                  >
                     <td className="font-bold text-slate-900">
-                      <span className="text-slate-400 font-medium mr-1.5">UNIT</span>
+                      <span className="text-slate-400 font-medium mr-1.5">
+                        UNIT
+                      </span>
                       {slot.slotNo}
                     </td>
+
                     <td>
                       {slot.isCovered ? (
-                        <div className="flex items-center gap-2 text-indigo-600 font-semibold text-xs">
-                          <div className="bg-indigo-50 p-1.5 rounded-lg">
-                            <Home className="w-3.5 h-3.5" />
-                          </div>
-                          Indoor Facility
-                        </div>
+                        <FeatureBadge
+                          icon={<Home className="w-3.5 h-3.5" />}
+                          text="Indoor Facility"
+                          color="indigo"
+                        />
                       ) : (
-                        <span className="text-slate-400 text-xs font-medium">Standard Lot</span>
+                        <MutedText text="Standard Lot" />
                       )}
                     </td>
+
                     <td>
                       {slot.isEVCharging ? (
-                        <div className="flex items-center gap-2 text-blue-600 font-semibold text-xs">
-                          <div className="bg-blue-50 p-1.5 rounded-lg">
-                            <Zap className="w-3.5 h-3.5" />
-                          </div>
-                          EV Integrated
-                        </div>
+                        <FeatureBadge
+                          icon={<Zap className="w-3.5 h-3.5" />}
+                          text="EV Integrated"
+                          color="blue"
+                        />
                       ) : (
-                        <span className="text-slate-400 text-xs font-medium">No Charging</span>
+                        <MutedText text="No Charging" />
                       )}
                     </td>
+
                     <td>
                       {slot.isOccupied ? (
-                        <span className="badge-occupied flex items-center gap-1.5 w-fit">
-                          <XCircle className="w-3 h-3" />
-                          Unavailable
-                        </span>
+                        <StatusBadge
+                          text="Unavailable"
+                          icon={<XCircle className="w-3 h-3" />}
+                          variant="danger"
+                        />
                       ) : (
-                        <span className="badge-available flex items-center gap-1.5 w-fit">
-                          <CheckCircle2 className="w-3 h-3" />
-                          Ready
-                        </span>
+                        <StatusBadge
+                          text="Ready"
+                          icon={<CheckCircle2 className="w-3 h-3" />}
+                          variant="success"
+                        />
                       )}
                     </td>
                   </tr>
@@ -119,3 +116,70 @@ function SlotList({ slots }) {
 }
 
 export default SlotList;
+
+
+function StatCard({ label, value, variant }) {
+  const styles = {
+    success: "text-emerald-600",
+    danger: "text-rose-600",
+    default: "text-slate-900"
+  };
+
+  return (
+    <div className="bg-white border border-slate-200 px-6 py-4 rounded-2xl shadow-sm text-center min-w-[120px]">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+        {label}
+      </p>
+      <p className={`text-2xl font-black ${styles[variant] || styles.default}`}>
+        {value}
+      </p>
+    </div>
+  );
+}
+function FeatureBadge({ icon, text, color }) {
+  const colors = {
+    indigo: "bg-indigo-50 text-indigo-600",
+    blue: "bg-blue-50 text-blue-600"
+  };
+
+  return (
+    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold ${colors[color]}`}>
+      {icon}
+      {text}
+    </div>
+  );
+}
+
+
+function StatusBadge({ icon, text, variant }) {
+  const styles = {
+    success: "bg-emerald-100 text-emerald-700 ring-emerald-200",
+    danger: "bg-rose-100 text-rose-700 ring-rose-200"
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ring-1 ${styles[variant]}`}
+    >
+      {icon}
+      {text}
+    </span>
+  );
+}
+
+
+function EmptyState() {
+  return (
+    <div className="text-center py-24 bg-slate-50/50">
+      <div className="bg-white w-20 h-20 rounded-3xl shadow-sm border border-slate-200 flex items-center justify-center mx-auto mb-6">
+        <Info className="w-8 h-8 text-slate-300" />
+      </div>
+      <h3 className="text-lg font-bold text-slate-900">
+        No Inventory Data
+      </h3>
+      <p className="text-slate-500 text-sm max-w-xs mx-auto mt-2 leading-relaxed">
+        Queue your first parking slot to unlock real-time analytics.
+      </p>
+    </div>
+  );
+}

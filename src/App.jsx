@@ -20,19 +20,18 @@ const App = () => {
   const [message, setMessage] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
 
+  // Load slots from localStorage
   useEffect(() => {
     const savedSlots = localStorage.getItem("parkingSlots");
-    if (savedSlots) {
-      setSlots(JSON.parse(savedSlots));
-    }
+    if (savedSlots) setSlots(JSON.parse(savedSlots));
   }, []);
 
+  // Save slots to localStorage whenever slots change
   useEffect(() => {
-    if (slots.length > 0) {
-      localStorage.setItem("parkingSlots", JSON.stringify(slots));
-    }
+    localStorage.setItem("parkingSlots", JSON.stringify(slots));
   }, [slots]);
 
+  // Auto-clear messages
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => setMessage(""), 4000);
@@ -48,6 +47,7 @@ const App = () => {
 
   return (
     <div className="flex min-h-screen bg-gray-100 text-gray-800 font-sans">
+      {/* Sidebar */}
       <aside className="w-72 bg-white border-r border-slate-200 flex flex-col sticky top-0 h-screen">
         <div className="p-8 border-b border-slate-100 mb-6">
           <div className="flex items-center gap-3">
@@ -65,8 +65,11 @@ const App = () => {
             <div
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`sidebar-link ${activeTab === item.id ? "sidebar-link-active" : "sidebar-link-inactive"
-                }`}
+              className={`sidebar-link ${
+                activeTab === item.id
+                  ? "sidebar-link-active"
+                  : "sidebar-link-inactive"
+              }`}
             >
               <item.icon className="w-5 h-5" />
               {item.label}
@@ -86,7 +89,9 @@ const App = () => {
         </div>
       </aside>
 
+      {/* Main */}
       <main className="flex-1 min-w-0">
+        {/* Header */}
         <header className="h-20 bg-white border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40">
           <div className="flex items-center bg-slate-100 px-4 py-2.5 rounded-xl w-96 group focus-within:ring-2 focus-within:ring-indigo-500/10 focus-within:bg-white focus-within:border-slate-300 border border-transparent transition-all">
             <Search className="w-4 h-4 text-slate-400 group-focus-within:text-indigo-500" />
@@ -115,13 +120,12 @@ const App = () => {
           </div>
         </header>
 
-        <div className="p-8 max-w-7xl mx-auto">
+        {/* Content */}
+        <div className="p-8 max-w-7xl mx-auto space-y-8">
           <OutputPanel message={message} />
 
           {activeTab === "overview" && (
-            <div className="space-y-8 animate-fadeIn">
-              <SlotList slots={slots} />
-            </div>
+            <SlotList slots={slots} />
           )}
 
           {activeTab === "add" && (
@@ -134,9 +138,7 @@ const App = () => {
 
           {activeTab === "manage" && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
-              <div className="glass-card">
-                <ParkRemove slots={slots} setSlots={setSlots} setMessage={setMessage} />
-              </div>
+              <ParkRemove slots={slots} setSlots={setSlots} setMessage={setMessage} />
 
               <div className="glass-card bg-indigo-900 border-none text-white relative overflow-hidden">
                 <div className="relative z-10 space-y-4">
