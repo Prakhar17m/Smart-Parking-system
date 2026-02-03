@@ -6,7 +6,7 @@ import {
   Home,
   Search,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 
 function ParkRemove({ slots, setSlots, setMessage }) {
@@ -57,24 +57,24 @@ function ParkRemove({ slots, setSlots, setMessage }) {
   };
 
   return (
-    <div className="space-y-10">
+    <div className="stack-gap-lg">
       {/* Header */}
-      <h2 className="section-title flex items-center gap-3">
-        <span className="p-2 rounded-xl bg-indigo-100 text-indigo-600">
+      <h2 className="section-title">
+        <span className="section-pill">
           <ParkingCircle className="w-5 h-5" />
         </span>
         Vehicle Management
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="vehicle-management">
         {/* Entry Assignment */}
         <div className="glass-card">
-          <h3 className="card-title text-emerald-700 flex items-center gap-2">
+          <div className="card-subtitle">
             <CheckCircle2 className="w-4 h-4" />
             Entry Assignment
-          </h3>
+          </div>
 
-          <div className="flex gap-6 my-6">
+          <div className="toggle-row">
             <PremiumToggle
               checked={needsEV}
               onChange={setNeedsEV}
@@ -90,10 +90,7 @@ function ParkRemove({ slots, setSlots, setMessage }) {
             />
           </div>
 
-          <button
-            onClick={parkVehicle}
-            className="btn-success w-full"
-          >
+          <button onClick={parkVehicle} className="btn-success btn-full">
             <ParkingCircle className="w-4 h-4" />
             Assign Smart Slot
           </button>
@@ -101,26 +98,25 @@ function ParkRemove({ slots, setSlots, setMessage }) {
 
         {/* Exit Clearance */}
         <div className="glass-card">
-          <h3 className="card-title text-rose-600 flex items-center gap-2">
+          <div className="card-subtitle">
             <Trash2 className="w-4 h-4" />
             Exit Clearance
-          </h3>
-
-          <div className="relative my-6">
-            <input
-              type="number"
-              placeholder="Enter Slot ID"
-              value={removeSlotNo}
-              onChange={e => setRemoveSlotNo(e.target.value)}
-              className="premium-input pl-11"
-            />
-            <Search className="w-4 h-4 text-slate-400 absolute left-4 top-3.5" />
           </div>
 
-          <button
-            onClick={removeVehicle}
-            className="btn-danger w-full"
-          >
+          <div className="field-group">
+            <div className="field-input-wrapper">
+              <Search className="field-input-icon" />
+              <input
+                type="number"
+                placeholder="Enter Slot ID"
+                value={removeSlotNo}
+                onChange={(e) => setRemoveSlotNo(e.target.value)}
+                className="premium-input field-input"
+              />
+            </div>
+          </div>
+
+          <button onClick={removeVehicle} className="btn-danger btn-full">
             <AlertCircle className="w-4 h-4" />
             Finalize Checkout
           </button>
@@ -136,17 +132,16 @@ export default ParkRemove;
 
 function PremiumToggle({ checked, onChange, icon, label }) {
   return (
-    <label className="flex items-center gap-3 cursor-pointer group">
+    <label className="premium-toggle">
       <input
         type="checkbox"
         checked={checked}
-        onChange={e => onChange(e.target.checked)}
-        className="premium-checkbox"
+        onChange={(e) => onChange(e.target.checked)}
       />
       <div
-        className={`flex items-center gap-2 text-sm font-semibold transition ${
-          checked ? "text-indigo-600" : "text-slate-500"
-        }`}
+        className={
+          checked ? "premium-toggle-label premium-toggle-label--active" : "premium-toggle-label"
+        }
       >
         {icon}
         {label}

@@ -1,11 +1,5 @@
-import {
-  LayoutGrid,
-  CheckCircle2,
-  XCircle,
-  Zap,
-  Home,
-  Info
-} from "lucide-react";
+import React from "react";
+import { LayoutGrid, CheckCircle2, XCircle, Zap, Home, Info } from "lucide-react";
 
 function SlotList({ slots }) {
   const totalSlots = slots.length;
@@ -13,23 +7,23 @@ function SlotList({ slots }) {
   const availableSlots = totalSlots - occupiedSlots;
 
   return (
-    <div className="space-y-8">
+    <div className="stack-gap-lg">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="slot-list-header">
         <div>
-          <h2 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-            <span className="p-2 rounded-xl bg-indigo-100 text-indigo-600">
+          <h2 className="section-title">
+            <span className="section-pill">
               <LayoutGrid className="w-5 h-5" />
             </span>
             Live Inventory
           </h2>
-          <p className="text-slate-500 text-sm mt-1 font-medium">
+          <p className="section-subtitle">
             Real-time status of all registered parking units.
           </p>
         </div>
 
         {/* Stats */}
-        <div className="flex gap-3">
+        <div className="stat-row">
           <StatCard label="Capacity" value={totalSlots} />
           <StatCard label="Available" value={availableSlots} variant="success" />
           <StatCard label="Occupied" value={occupiedSlots} variant="danger" />
@@ -37,12 +31,12 @@ function SlotList({ slots }) {
       </div>
 
       {/* Table Card */}
-      <div className="glass-card !p-0 overflow-hidden">
+      <div className="table-card">
         {slots.length === 0 ? (
           <EmptyState />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full premium-table">
+          <div className="table-scroll">
+            <table className="premium-table">
               <thead>
                 <tr>
                   <th>Identity</th>
@@ -53,16 +47,14 @@ function SlotList({ slots }) {
               </thead>
 
               <tbody>
-                {slots.map(slot => (
+                {slots.map((slot) => (
                   <tr
                     key={slot.slotNo}
-                    className="hover:bg-indigo-50/40 transition"
+                    className={slot.isOccupied ? "row-occupied" : "row-available"}
                   >
-                    <td className="font-bold text-slate-900">
-                      <span className="text-slate-400 font-medium mr-1.5">
-                        UNIT
-                      </span>
-                      {slot.slotNo}
+                    <td>
+                      <span className="unit-label">UNIT</span>
+                      <span className="unit-value">{slot.slotNo}</span>
                     </td>
 
                     <td>
@@ -117,49 +109,52 @@ function SlotList({ slots }) {
 
 export default SlotList;
 
+/* ---------------- Helpers ---------------- */
 
 function StatCard({ label, value, variant }) {
-  const styles = {
-    success: "text-emerald-600",
-    danger: "text-rose-600",
-    default: "text-slate-900"
-  };
-
   return (
-    <div className="bg-white border border-slate-200 px-6 py-4 rounded-2xl shadow-sm text-center min-w-[120px]">
-      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1">
+    <div className="stat-card">
+      <p className="stat-card-label">
         {label}
       </p>
-      <p className={`text-2xl font-black ${styles[variant] || styles.default}`}>
+      <p
+        className={
+          variant === "success"
+            ? "stat-card-value stat-card-value--success"
+            : variant === "danger"
+            ? "stat-card-value stat-card-value--danger"
+            : "stat-card-value"
+        }
+      >
         {value}
       </p>
     </div>
   );
 }
-function FeatureBadge({ icon, text, color }) {
-  const colors = {
-    indigo: "bg-indigo-50 text-indigo-600",
-    blue: "bg-blue-50 text-blue-600"
-  };
 
+function FeatureBadge({ icon, text, color }) {
   return (
-    <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold ${colors[color]}`}>
+    <div
+      className={
+        color === "indigo"
+          ? "feature-badge feature-badge--indigo"
+          : "feature-badge feature-badge--blue"
+      }
+    >
       {icon}
       {text}
     </div>
   );
 }
 
-
 function StatusBadge({ icon, text, variant }) {
-  const styles = {
-    success: "bg-emerald-100 text-emerald-700 ring-emerald-200",
-    danger: "bg-rose-100 text-rose-700 ring-rose-200"
-  };
-
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold ring-1 ${styles[variant]}`}
+      className={
+        variant === "success"
+          ? "status-pill status-pill--success"
+          : "status-pill status-pill--danger"
+      }
     >
       {icon}
       {text}
@@ -167,17 +162,18 @@ function StatusBadge({ icon, text, variant }) {
   );
 }
 
+function MutedText({ text }) {
+  return <span className="muted-text">{text}</span>;
+}
 
 function EmptyState() {
   return (
-    <div className="text-center py-24 bg-slate-50/50">
-      <div className="bg-white w-20 h-20 rounded-3xl shadow-sm border border-slate-200 flex items-center justify-center mx-auto mb-6">
+    <div className="empty-state">
+      <div className="empty-state-icon">
         <Info className="w-8 h-8 text-slate-300" />
       </div>
-      <h3 className="text-lg font-bold text-slate-900">
-        No Inventory Data
-      </h3>
-      <p className="text-slate-500 text-sm max-w-xs mx-auto mt-2 leading-relaxed">
+      <h3 className="empty-state-title">No Inventory Data</h3>
+      <p className="empty-state-text">
         Queue your first parking slot to unlock real-time analytics.
       </p>
     </div>

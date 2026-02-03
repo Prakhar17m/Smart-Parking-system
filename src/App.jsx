@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./index.css";
 import {
   LayoutDashboard,
   PlusCircle,
@@ -8,7 +7,7 @@ import {
   LogOut,
   Bell,
   Search,
-  User
+  User,
 } from "lucide-react";
 import AddSlot from "./components/AddSlot";
 import OutputPanel from "./components/OutputPanel";
@@ -46,21 +45,21 @@ const App = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-100 text-gray-800 font-sans">
+    <div className="app-shell">
       {/* Sidebar */}
-      <aside className="w-72 bg-white border-r border-slate-200 flex flex-col sticky top-0 h-screen">
-        <div className="p-8 border-b border-slate-100 mb-6">
-          <div className="flex items-center gap-3">
-            <div className="bg-indigo-600 p-2 rounded-xl">
+      <aside className="sidebar">
+        <div className="sidebar-header">
+          <div className="sidebar-brand">
+            <div className="sidebar-logo">
               <ParkingCircle className="text-white w-6 h-6" />
             </div>
-            <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">
-              ProTrack <span className="text-indigo-600 font-normal">SPS</span>
+            <h1 className="sidebar-title">
+              ProTrack <span>SPS</span>
             </h1>
           </div>
         </div>
 
-        <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto">
+        <nav className="sidebar-nav">
           {navItems.map((item) => (
             <div
               key={item.id}
@@ -77,12 +76,12 @@ const App = () => {
           ))}
         </nav>
 
-        <div className="p-6 border-t border-slate-100 space-y-2">
+        <div className="sidebar-footer">
           <div className="sidebar-link sidebar-link-inactive">
             <Settings className="w-5 h-5" />
             Settings
           </div>
-          <div className="sidebar-link sidebar-link-inactive text-rose-500 hover:bg-rose-50 hover:text-rose-600">
+          <div className="sidebar-link sidebar-link-inactive sidebar-logout">
             <LogOut className="w-5 h-5" />
             Logout
           </div>
@@ -90,30 +89,30 @@ const App = () => {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 min-w-0">
+      <main className="main">
         {/* Header */}
-        <header className="h-20 bg-white border-b border-slate-100 px-8 flex items-center justify-between sticky top-0 z-40">
-          <div className="flex items-center bg-slate-100 px-4 py-2.5 rounded-xl w-96 group focus-within:ring-2 focus-within:ring-indigo-500/10 focus-within:bg-white focus-within:border-slate-300 border border-transparent transition-all">
-            <Search className="w-4 h-4 text-slate-400 group-focus-within:text-indigo-500" />
+        <header className="main-header">
+          <div className="search-bar">
+            <Search className="w-4 h-4" />
             <input
               type="text"
               placeholder="Search for slots..."
-              className="bg-transparent border-none outline-none ml-3 text-sm w-full text-slate-700"
+              aria-label="Search for slots"
             />
           </div>
 
-          <div className="flex items-center gap-4">
-            <button className="p-2.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all relative">
+          <div className="header-right">
+            <button className="icon-button" aria-label="Notifications">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-2 right-2.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
+              <span className="badge-dot" />
             </button>
-            <div className="h-8 w-px bg-slate-200 mx-2"></div>
-            <div className="flex items-center gap-3 pl-2 cursor-pointer group">
-              <div className="text-right hidden sm:block">
-                <p className="text-sm font-bold text-slate-900 leading-tight">Admin User</p>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-tighter">System Manager</p>
+            <div className="divider-vertical" />
+            <div className="header-user">
+              <div className="user-meta">
+                <p className="user-meta-title">Admin User</p>
+                <p className="user-meta-subtitle">System Manager</p>
               </div>
-              <div className="w-10 h-10 bg-gradient-to-tr from-indigo-500 to-indigo-700 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200 group-hover:scale-105 transition-all">
+              <div className="header-user-icon">
                 <User className="w-5 h-5" />
               </div>
             </div>
@@ -121,39 +120,44 @@ const App = () => {
         </header>
 
         {/* Content */}
-        <div className="p-8 max-w-7xl mx-auto space-y-8">
-          <OutputPanel message={message} />
+        <div className="page-content stack-gap-lg">
+          <OutputPanel message={message} onClose={() => setMessage("")} />
 
-          {activeTab === "overview" && (
-            <SlotList slots={slots} />
-          )}
+          {activeTab === "overview" && <SlotList slots={slots} />}
 
           {activeTab === "add" && (
-            <div className="max-w-2xl animate-fadeIn">
+            <div className="add-slot-card animate-fadeIn">
               <div className="glass-card">
-                <AddSlot slots={slots} setSlots={setSlots} setMessage={setMessage} />
+                <AddSlot
+                  slots={slots}
+                  setSlots={setSlots}
+                  setMessage={setMessage}
+                />
               </div>
             </div>
           )}
 
           {activeTab === "manage" && (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fadeIn">
-              <ParkRemove slots={slots} setSlots={setSlots} setMessage={setMessage} />
+            <div className="vehicle-management animate-fadeIn">
+              <ParkRemove
+                slots={slots}
+                setSlots={setSlots}
+                setMessage={setMessage}
+              />
 
-              <div className="glass-card bg-indigo-900 border-none text-white relative overflow-hidden">
-                <div className="relative z-10 space-y-4">
-                  <h3 className="text-xl font-bold">Smart Tips</h3>
-                  <p className="text-indigo-100 text-sm leading-relaxed">
-                    Always verify the EV charging status before parking an electric vehicle.
-                    The system automatically calculates the nearest available slot based on customer needs.
+              <div className="glass-card smart-tips">
+                <div className="smart-tips-inner">
+                  <h3 className="add-slot-title">Smart Tips</h3>
+                  <p className="section-subtitle">
+                    Always verify the EV charging status before parking an
+                    electric vehicle. The system automatically calculates the
+                    nearest available slot based on customer needs.
                   </p>
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    <span className="px-3 py-1 bg-white/10 rounded-lg text-xs font-semibold backdrop-blur-md">Efficiency</span>
-                    <span className="px-3 py-1 bg-white/10 rounded-lg text-xs font-semibold backdrop-blur-md">AI Priority</span>
+                  <div className="pill-row">
+                    <span>Efficiency</span>
+                    <span>AI Priority</span>
                   </div>
                 </div>
-                <div className="absolute -bottom-8 -right-8 w-40 h-40 bg-indigo-500 rounded-full blur-3xl opacity-20"></div>
-                <div className="absolute -top-10 -left-10 w-40 h-40 bg-white rounded-full blur-3xl opacity-10"></div>
               </div>
             </div>
           )}

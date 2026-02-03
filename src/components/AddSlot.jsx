@@ -27,90 +27,75 @@ function AddSlot({ slots, setSlots, setMessage }) {
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-xl border border-slate-200 rounded-2xl p-6 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)]">
-      
+    <div>
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 rounded-lg bg-indigo-100 text-indigo-600">
+      <div className="add-slot-header">
+        <div className="add-slot-icon">
           <Plus className="w-5 h-5" />
         </div>
-        <h2 className="text-lg font-bold text-slate-800 tracking-tight">
-          Provision New Slot
-        </h2>
+        <h2 className="add-slot-title">Provision New Slot</h2>
       </div>
 
       {/* Form */}
-      <div className="space-y-6">
+      <div>
         {/* Slot Input */}
-        <div>
-          <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2">
-            Slot Identification
-          </label>
-          <div className="relative">
-            <Car className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+        <div className="field-group">
+          <label className="field-label">Slot Identification</label>
+          <div className="field-input-wrapper">
+            <Car className="field-input-icon" />
             <input
               type="number"
               placeholder="e.g. 101"
               value={slotNo}
-              onChange={e => setSlotNo(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 rounded-xl border border-slate-300 
-                         text-sm font-medium text-slate-700
-                         focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-                         transition"
+              onChange={(e) => setSlotNo(e.target.value)}
+              className="premium-input field-input"
             />
           </div>
         </div>
 
         {/* Toggles */}
-        <div className="flex gap-10">
+        <div className="toggle-pair">
           {/* Covered */}
-          <label className="flex items-center gap-3 cursor-pointer">
+          <label className="premium-toggle">
             <input
               type="checkbox"
               checked={isCovered}
-              onChange={e => setIsCovered(e.target.checked)}
-              className="sr-only peer"
+              onChange={(e) => setIsCovered(e.target.checked)}
             />
-            <div className="w-11 h-6 bg-slate-300 rounded-full peer-checked:bg-indigo-600
-                            relative after:content-[''] after:absolute after:top-0.5 after:left-0.5
-                            after:w-5 after:h-5 after:bg-white after:rounded-full
-                            after:transition peer-checked:after:translate-x-5">
-            </div>
-            <div className="flex items-center gap-2">
-              <Home className={`w-4 h-4 ${isCovered ? "text-indigo-600" : "text-slate-400"}`} />
-              <span className="text-sm font-semibold text-slate-600">Covered</span>
+            <div
+              className={
+                isCovered
+                  ? "premium-toggle-label premium-toggle-label--active"
+                  : "premium-toggle-label"
+              }
+            >
+              <Home className="w-4 h-4" />
+              <span>Covered</span>
             </div>
           </label>
 
           {/* EV */}
-          <label className="flex items-center gap-3 cursor-pointer">
+          <label className="premium-toggle">
             <input
               type="checkbox"
               checked={isEVCharging}
-              onChange={e => setIsEVCharging(e.target.checked)}
-              className="sr-only peer"
+              onChange={(e) => setIsEVCharging(e.target.checked)}
             />
-            <div className="w-11 h-6 bg-slate-300 rounded-full peer-checked:bg-indigo-600
-                            relative after:content-[''] after:absolute after:top-0.5 after:left-0.5
-                            after:w-5 after:h-5 after:bg-white after:rounded-full
-                            after:transition peer-checked:after:translate-x-5">
-            </div>
-            <div className="flex items-center gap-2">
-              <Zap className={`w-4 h-4 ${isEVCharging ? "text-indigo-600" : "text-slate-400"}`} />
-              <span className="text-sm font-semibold text-slate-600">EV Station</span>
+            <div
+              className={
+                isEVCharging
+                  ? "premium-toggle-label premium-toggle-label--active"
+                  : "premium-toggle-label"
+              }
+            >
+              <Zap className="w-4 h-4" />
+              <span>EV Station</span>
             </div>
           </label>
         </div>
 
         {/* Button */}
-        <button
-          onClick={addSlot}
-          className="w-full flex items-center justify-center gap-2
-                     bg-gradient-to-r from-indigo-600 to-indigo-500
-                     text-white text-sm font-semibold py-3 rounded-xl
-                     shadow-md hover:shadow-lg hover:from-indigo-500 hover:to-indigo-600
-                     active:scale-[0.98] transition"
-        >
+        <button onClick={addSlot} className="btn-primary btn-full">
           <Plus className="w-4 h-4" />
           Register Slot
         </button>
